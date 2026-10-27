@@ -265,6 +265,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Asla Intervals";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Asla Intervals listens when you tap the microphone, so you can describe a timer with your voice.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Asla Intervals turns what you say into text to set up your timer. Depending on the language, speech may be sent to Apple to be recognized.";
@@ -296,6 +297,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Asla Intervals";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Asla Intervals listens when you tap the microphone, so you can describe a timer with your voice.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Asla Intervals turns what you say into text to set up your timer. Depending on the language, speech may be sent to Apple to be recognized.";

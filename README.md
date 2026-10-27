@@ -74,6 +74,16 @@ The project uses Xcode's folder-synced groups, so any file you add under `AslaIn
 - Create both products with the IDs above, add review screenshots, and submit them together with the app version.
 - Fill in *App Privacy*: the app uses microphone audio and speech recognition only to set up timers and stores nothing on a server.
 
+## Release to TestFlight
+
+Builds are uploaded by GitHub Actions (`.github/workflows/testflight.yml`) with Xcode automatic signing and an App Store Connect API key. No certificates or profiles are stored anywhere.
+
+1. One-time setup: add the repository secrets `ASC_KEY_ID`, `ASC_ISSUER_ID` and `ASC_KEY_P8` (Team key with the Admin role).
+2. Start a build from *Actions → TestFlight → Run workflow*, or push a version tag:
+   `git tag v1.0.0 && git push origin v1.0.0`
+3. The build number is the workflow run number + `BUILD_NUMBER_OFFSET`. Change `MARKETING_VERSION` in Xcode for a new version.
+4. After 5–30 minutes of processing by Apple, the build shows up in TestFlight.
+
 ## Project layout
 
 ```

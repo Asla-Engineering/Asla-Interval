@@ -1,0 +1,139 @@
+# Builds Asla Intervals and uploads it to TestFlight.
+#
+# Signing: Xcode automatic signing ("cloud signing") with an App Store Connect
+# Team API key (Admin role). No certificates or profiles are stored in the repo
+# or in GitHub Secrets.
+#
+# Required repository secrets:
+#   ASC_KEY_ID      Key ID of the App Store Connect API key
+#   ASC_ISSUER_ID   Issuer ID shown at the top of the API keys page
+#   ASC_KEY_P8      Full contents of AuthKey_<KEY_ID>.p8
+#                   (gh secret set ASC_KEY_P8 < AuthKey_XXXXXXXXXX.p8)
+#
+# Runs when started by hand from the Actions tab, or when a version tag
+# such as v1.0.0 is pushed.
+
+name: TestFlight
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+# Never run two uploads at the same time.
+concurrency:
+  group: testflight
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  XCODE_VERSION: "26.6"
+  PROJECT: AslaIntervals.xcodeproj
+  SCHEME: AslaIntervals
+  TEAM_ID: ZT8ZLK8H2K
+  # Added to the workflow run number to get the build number (CFBundleVersion).
+  # Raise it if a build with a higher number was uploaded another way.
+  BUILD_NUMBER_OFFSET: "1"
+
+jobs:
+  testflight:
+    name: Build and upload to TestFlight
+    runs-on: macos-26
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Select Xcode ${{ env.XCODE_VERSION }}
+        run: |
+          sudo xcode-select --switch "/Applications/Xcode_${XCODE_VERSION}.app"
+          xcodebuild -version
+
+      - name: Install App Store Connect API key
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          if [ -z "$ASC_KEY_ID" ] || [ -z "$ASC_KEY_P8" ]; then
+            echo "::error::Secrets ASC_KEY_ID and ASC_KEY_P8 must be set."
+            exit 1
+          fi
+          KEY_PATH="$RUNNER_TEMP/AuthKey_${ASC_KEY_ID}.p8"
+          printf '%s\n' "$ASC_KEY_P8" > "$KEY_PATH"
+          chmod 600 "$KEY_PATH"
+          echo "ASC_KEY_PATH=$KEY_PATH" >> "$GITHUB_ENV"
+
+      - name: Set build number
+        run: |
+          BUILD_NUMBER=$(( GITHUB_RUN_NUMBER + BUILD_NUMBER_OFFSET ))
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> "$GITHUB_ENV"
+          echo "Build number: $BUILD_NUMBER"
+
+      - name: Archive
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          set -o pipefail
+          xcodebuild archive \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath "$RUNNER_TEMP/AslaIntervals.xcarchive" \
+            -resultBundlePath "$RUNNER_TEMP/results/archive.xcresult" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            DEVELOPMENT_TEAM="$TEAM_ID" \
+            CURRENT_PROJECT_VERSION="$BUILD_NUMBER"
+
+      - name: Sign and upload to App Store Connect
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          set -o pipefail
+          # ci/ExportOptions.plist uses destination = upload, so this step
+          # signs the archive and sends it straight to App Store Connect.
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/AslaIntervals.xcarchive" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -exportOptionsPlist ci/ExportOptions.plist \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+
+      - name: Write summary
+        run: |
+          VERSION=$(/usr/libexec/PlistBuddy -c "Print :ApplicationProperties:CFBundleShortVersionString" "$RUNNER_TEMP/AslaIntervals.xcarchive/Info.plist")
+          {
+            echo "### Uploaded to TestFlight"
+            echo ""
+            echo "| Version | Build |"
+            echo "| --- | --- |"
+            echo "| $VERSION | $BUILD_NUMBER |"
+            echo ""
+            echo "Apple processes the build for 5–30 minutes before it shows up in TestFlight."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Save logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcode-logs-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/results
+            ${{ runner.temp }}/export/*.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Remove API key
+        if: always()
+        run: rm -f "$RUNNER_TEMP"/AuthKey_*.p8
