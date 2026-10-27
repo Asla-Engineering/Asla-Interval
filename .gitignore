@@ -14,3 +14,28 @@ build/
 # Swift Package Manager
 .swiftpm/
 .build/
+
+# Xcode build output
+*.xcresult
+*.xcarchive
+
+# Code signing — never commit certificates, profiles or API keys
+*.p12
+*.cer
+*.certSigningRequest
+*.mobileprovision
+*.provisionprofile
+AuthKey_*.p8
+*.p8
+
+# Local secrets and per-developer settings
+.env
+.env.*
+Secrets.xcconfig
+Local.xcconfig
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output/
