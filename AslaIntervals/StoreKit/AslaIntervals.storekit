@@ -1,0 +1,48 @@
+{
+  "identifier" : "4A5C1E90",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "0.0",
+      "familyShareable" : false,
+      "internalID" : "6754000001",
+      "localizations" : [
+        {
+          "description" : "Try Voice Timer free for 14 days. Nothing renews.",
+          "displayName" : "14-day Trial",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "no.asla.AslaIntervals.voicetimer.trial",
+      "referenceName" : "Voice Timer 14-day Trial",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "49.0",
+      "familyShareable" : true,
+      "internalID" : "6754000002",
+      "localizations" : [
+        {
+          "description" : "Create timers by describing your workout with your voice.",
+          "displayName" : "Voice Timer",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "no.asla.AslaIntervals.voicetimer.unlock",
+      "referenceName" : "Voice Timer",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_storefront" : "NOR"
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

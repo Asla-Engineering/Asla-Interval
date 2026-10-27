@@ -1,0 +1,51 @@
+{
+  "fill" : {
+    "linear-gradient" : [
+      "display-p3:1.00000,0.41569,0.23922,1.00000",
+      "srgb:0.94902,0.16078,0.35686,1.00000"
+    ],
+    "orientation" : {
+      "start" : {
+        "x" : 0.5,
+        "y" : 0
+      },
+      "stop" : {
+        "x" : 0.5,
+        "y" : 0.7
+      }
+    }
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "image-name" : "1-Rounds-Elapsed.svg",
+          "name" : "1-Rounds-Elapsed",
+          "opacity" : 0.4
+        },
+        {
+          "image-name" : "2-Rounds-Remaining.svg",
+          "name" : "2-Rounds-Remaining"
+        },
+        {
+          "image-name" : "3-Hand.svg",
+          "name" : "3-Hand"
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
