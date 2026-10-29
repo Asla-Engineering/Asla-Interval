@@ -56,9 +56,7 @@ struct VoicePaywallView: View {
     }
 
     private var example: String {
-        VoiceFeature.speaksNorwegian
-            ? "«4 runder med 40 sekunder burpees og 20 sekunder pause.»"
-            : "“4 rounds of 40 seconds burpees and 20 seconds rest.”"
+        "“4 rounds of 40 seconds burpees and 20 seconds rest.”"
     }
 
     @ViewBuilder

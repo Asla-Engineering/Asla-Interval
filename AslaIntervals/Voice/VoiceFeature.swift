@@ -54,7 +54,8 @@ enum VoiceFeature {
         }
     }
 
-    static var speaksNorwegian: Bool {
-        speechLocale.language.languageCode?.identifier == "nb"
+    /// The name of the language Voice Timer listens in, shown under the microphone.
+    static var speechLanguageName: String {
+        speechLocale.language.languageCode?.identifier == "nb" ? "Norwegian" : "English"
     }
 }

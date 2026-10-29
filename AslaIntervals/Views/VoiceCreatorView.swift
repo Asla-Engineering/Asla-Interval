@@ -38,6 +38,9 @@ struct VoiceCreatorView: View {
                     Text(listener.isListening ? "Listening… Tap to stop." : "Tap the microphone and start talking.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                    Label("Listening in \(VoiceFeature.speechLanguageName)", systemImage: "globe")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
                 TextField("Or type it here", text: $text, axis: .vertical)
@@ -80,9 +83,7 @@ struct VoiceCreatorView: View {
     // MARK: Pieces
 
     private var example: String {
-        VoiceFeature.speaksNorwegian
-            ? "For eksempel: «4 runder med 40 sekunder burpees og 20 sekunder pause, og ett minutt hvile mellom rundene.»"
-            : "For example: “4 rounds of 40 seconds burpees and 20 seconds rest, with one minute of rest between rounds.”"
+        "For example: “4 rounds of 40 seconds burpees and 20 seconds rest, with one minute of rest between rounds.”"
     }
 
     private var microphoneButton: some View {

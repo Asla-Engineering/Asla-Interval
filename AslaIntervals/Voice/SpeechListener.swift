@@ -38,6 +38,29 @@ final class SpeechListener {
         "sekunder", "minutter", "runder", "pause", "hvile", "øvelse",
         "seconds", "minutes", "rounds", "rest", "exercise",
         "burpees", "tabata", "planke", "plank", "knebøy", "squats", "utfall", "lunges",
+
+        // CrossFit exercises, English and Norwegian. Terms Norwegians say in
+        // English (wall balls, thrusters, dips) are listed once.
+        "push-ups", "armhevinger",
+        "pull-ups",
+        "sit-ups", "situps",
+        "deadlifts", "markløft",
+        "box jumps", "boksehopp",
+        "jumping jacks", "sprellemann",
+        "mountain climbers", "fjellklatrer",
+        "kettlebell swings", "kettlebellsving",
+        "wall balls",
+        "thrusters",
+        "double unders", "dobbelthopp",
+        "jump rope", "hoppetau",
+        "rowing", "roing",
+        "toes to bar", "tær til stang",
+        "handstand push-ups", "håndstående armhevinger",
+        "dips",
+        "clean and jerk", "støt",
+        "snatch", "rykk",
+        "rope climb", "tauklatring",
+        "high knees", "høye kneløft",
     ]
 
     private let audioEngine = AVAudioEngine()
